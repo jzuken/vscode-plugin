@@ -1,0 +1,93 @@
+{
+	"name": "ml-tree",
+	"displayName": "ML tree",
+	"description": "Provide access to ML tree",
+	"version": "0.0.7",
+	"publisher": "andreweinand",
+	"author": {
+		"name": "Microsoft Corporation",
+		"email": "aweinand@microsoft.com"
+	},
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.29.0",
+		"node": "^8.9.3"
+	},
+	"categories": [
+		"Debuggers"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/weinand/ml-tree.git"
+	},
+	"bugs": {
+		"url": "https://github.com/weinand/ml-tree/issues"
+	},
+	"dependencies": {
+		"@types/xml2js": "^0.4.5",
+		"vscode-nls": "4.0.0",
+		"xml2js": "^0.4.23"
+	},
+	"devDependencies": {
+		"typescript": "^3.1.6",
+		"vscode": "^1.1.22",
+		"@types/node": "^8.9.3",
+		"@types/mocha": "^5.2.5",
+		"vsce": "^1.53.0"
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"package": "vsce package"
+	},
+	"main": "./out/extension",
+	"activationEvents": [
+		"onCommand:extension.ml-tree.showmlView"
+	],
+	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"id": "extension.ml-tree.mlViewer",
+					"name": "ML tree",
+					"when": "extension.ml-tree.mlViewerContext"
+				}
+			]
+		},
+		"menus": {
+			"view/item/context": [
+				{
+					"command": "extension.ml-tree.kill"
+				},
+				{
+					"command": "extension.ml-tree.forceKill"
+				},
+				{
+					"command": "extension.ml-tree.startDebug",
+					"when": "viewItem == 'node'"
+				},
+				{
+					"command": "extension.ml-tree.startDebug",
+					"when": "viewItem == 'node-subs'"
+				},
+				{
+					"command": "extension.ml-tree.startDebugAll",
+					"when": "viewItem == 'subs'"
+				},
+				{
+					"command": "extension.ml-tree.startDebugAll",
+					"when": "viewItem == 'node-subs'"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "extension.ml-tree.showmlView",
+				"title": "Show srcML View"
+			}
+		]
+	}
+}
