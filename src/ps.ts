@@ -9,6 +9,7 @@ import { spawn, ChildProcess } from 'child_process';
 import { totalmem } from 'os';
 import { exists } from 'fs';
 import * as xml2js from 'xml2js';
+import { ok } from 'assert';
 
 export class SrcItem {
 	id: string;
@@ -91,7 +92,10 @@ export function listItems(rootId: string, rootFolder:string ): Promise<SrcItem> 
 					if (!parent.children) {
 						parent.children = [];
 					}
-					parent.children.push(item);
+					let fnd = parent.children.find(o => o.id ==item.id);
+					if(fnd==null || fnd ==undefined)
+						parent.children.push(item);
+
 					console.log("link: " + item.id +" to " + parent.id);
 				}else{
 					console.log("Not found in map " + parentId);
@@ -123,6 +127,13 @@ export function listItems(rootId: string, rootFolder:string ): Promise<SrcItem> 
 				  
 				}).catch( err =>{
 					console.log('Parsing error:' +err);    
+					addToTree(
+						"AST",
+						"AST.Exception" ,
+						err.message,
+						"Exception",
+						err.stack
+					);
 				});	 
 				
 				

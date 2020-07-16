@@ -3,10 +3,10 @@
 	"displayName": "ML tree",
 	"description": "Provide access to ML tree",
 	"version": "0.0.7",
-	"publisher": "andreweinand",
+	"publisher": "baminmru",
 	"author": {
-		"name": "Microsoft Corporation",
-		"email": "aweinand@microsoft.com"
+		"name": "com",
+		"email": "developer.bami@gmal.com"
 	},
 	"license": "MIT",
 	"engines": {
@@ -18,10 +18,10 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/weinand/ml-tree.git"
+		"url": "https://github.com/bamimru/ml-tree.git"
 	},
 	"bugs": {
-		"url": "https://github.com/weinand/ml-tree/issues"
+		"url": "https://github.com/baminmru/ml-tree/issues"
 	},
 	"dependencies": {
 		"@types/xml2js": "^0.4.5",
@@ -52,37 +52,11 @@
 			"explorer": [
 				{
 					"id": "extension.ml-tree.mlViewer",
-					"name": "ML tree",
-					"when": "extension.ml-tree.mlViewerContext"
+					"name": "ML tree"
 				}
 			]
 		},
-		"menus": {
-			"view/item/context": [
-				{
-					"command": "extension.ml-tree.kill"
-				},
-				{
-					"command": "extension.ml-tree.forceKill"
-				},
-				{
-					"command": "extension.ml-tree.startDebug",
-					"when": "viewItem == 'node'"
-				},
-				{
-					"command": "extension.ml-tree.startDebug",
-					"when": "viewItem == 'node-subs'"
-				},
-				{
-					"command": "extension.ml-tree.startDebugAll",
-					"when": "viewItem == 'subs'"
-				},
-				{
-					"command": "extension.ml-tree.startDebugAll",
-					"when": "viewItem == 'node-subs'"
-				}
-			]
-		},
+		
 		"commands": [
 			{
 				"command": "extension.ml-tree.showmlView",

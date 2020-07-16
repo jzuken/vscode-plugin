@@ -21,72 +21,32 @@ export function activate(context: vscode.ExtensionContext) {
 			mlViewer = vscode.window.createTreeView('extension.ml-tree.mlViewer', { treeDataProvider: provider });
 			mlViewer.onDidChangeVisibility(e => {
 				if (e.visible) {
-					provider.LoadTree("AST", vscode.workspace.workspaceFolders[0].uri.fsPath);
+					if(vscode.window.activeTextEditor   &&  vscode.window.activeTextEditor.document){
+						var doc = vscode.window.activeTextEditor.document.uri.fsPath;
+						console.log(doc);
+						provider.LoadTree("AST", doc);
+					}else{
+						provider.LoadTree("AST", vscode.workspace.workspaceFolders[0].uri.fsPath);
+					}
 				}
 			});
 		}
-
-		console.log(vscode.workspace.workspaceFolders);
-		vscode.commands.executeCommand('setContext', 'extension.ml-tree.mlViewerContext', true)
+ 
+		
+		// vscode.commands.executeCommand('setContext', 'extension.ml-tree.mlViewerContext', true)
 	}));
 
-	context.subscriptions.push(vscode.commands.registerCommand('extension.ml-tree.startDebug', (item: MLTreeItem) => attachTo(item)));
-
-	context.subscriptions.push(vscode.commands.registerCommand('extension.ml-tree.startDebugAll', (item: MLTreeItem) => {
-		for (let child of item._children) {
-			attachTo(child);
-		}
-	}));
-
-	context.subscriptions.push(vscode.commands.registerCommand('extension.ml-tree.kill', (item: MLTreeItem) => {
-		/* if (item._pid) {
-			mlnode.kill(item._pid, 'SIGTERM');
-		}
-		*/
-	}));
-
-	context.subscriptions.push(vscode.commands.registerCommand('extension.ml-tree.forceKill', (item: MLTreeItem) => {
-		/*if (item._pid) {
-			mlnode.kill(item._pid, 'SIGKILL');
-		}
-		*/
-	}));
+	
+	
+	 
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {
 }
 
-function attachTo(item: MLTreeItem) {
+ 
 
-	/* const config: vscode.DebugConfiguration = {
-		type: 'node',
-		request: 'attach',
-		name: `mlnode ${item._pid}`
-	};
-
-	let matches = DEBUG_FLAGS_PATTERN.exec(item._cmd);
-	if (matches && matches.length >= 2) {
-		// attach via port
-		if (matches.length === 5 && matches[4]) {
-			config.port = parseInt(matches[4]);
-		}
-		config.protocol = matches[1] === 'debug' ? 'legacy' : 'inspector';
-	} else {
-		// no port -> try to attach via pid (send SIGUSR1)
-		config.processId = String(item._pid);
-	}
-
-	// a debug-port=n or inspect-port=n overrides the port
-	matches = DEBUG_PORT_PATTERN.exec(item._cmd);
-	if (matches && matches.length === 3) {
-		// override port
-		config.port = parseInt(matches[2]);
-	}
-
-	vscode.debug.startDebugging(undefined, config);
-	*/
-}
 
 class MLTreeItem extends TreeItem {
 
