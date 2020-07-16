@@ -22,7 +22,7 @@ export class SrcItem {
 
 
 
-export function listItems(rootId: string): Promise<SrcItem> {
+export function listItems(rootId: string, rootFolder:string ): Promise<SrcItem> {
 
 
 	let rootItem:  SrcItem = {
@@ -105,8 +105,10 @@ export function listItems(rootId: string): Promise<SrcItem> {
 		console.log( "createing process");
 		//proc = spawn('c:/Program Files/srcML/srcml.exe',[ "--position", "-text='int v=12345;'" ,"--language=C++"] );
 		//proc = spawn('c:/Program Files/srcML/srcml.exe', ["--position", "-text='int v=12345;'", "--language=C++"]);
-		proc = spawn('srcml.exe', [ "-text={ int v=12345; }", "--language=C"]);
+		//proc = spawn('srcml.exe', [ "-text={ int v=12345; }", "--language=C"]);
+		//proc = spawn('srcml.exe', [ rootFolder , "--language=C++"]);
 	
+		proc = spawn('srcml.exe', [ rootFolder, "-X" ]);
 		
 		proc.stdout.setEncoding('utf8');
 		proc.stdout.on('data', (lines => {

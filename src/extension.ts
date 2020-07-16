@@ -11,6 +11,7 @@ import { TreeDataProvider, TreeItem, EventEmitter, Event, ProviderResult } from 
 
 let mlViewer: vscode.TreeView<MLTreeItem>;
 
+
 export function activate(context: vscode.ExtensionContext) {
 
 
@@ -20,10 +21,12 @@ export function activate(context: vscode.ExtensionContext) {
 			mlViewer = vscode.window.createTreeView('extension.ml-tree.mlViewer', { treeDataProvider: provider });
 			mlViewer.onDidChangeVisibility(e => {
 				if (e.visible) {
-					provider.LoadTree("AST");
+					provider.LoadTree("AST", vscode.workspace.workspaceFolders[0].uri.fsPath);
 				}
 			});
 		}
+
+		console.log(vscode.workspace.workspaceFolders);
 		vscode.commands.executeCommand('setContext', 'extension.ml-tree.mlViewerContext', true)
 	}));
 
@@ -93,6 +96,7 @@ class MLTreeItem extends TreeItem {
 	name: string;
 	type: string;
 	value: string;
+	
 
 	constructor(parent: MLTreeItem, mlnode: SrcItem) {
 		super('', vscode.TreeItemCollapsibleState.None);
@@ -261,6 +265,7 @@ class MLTreeItem extends TreeItem {
 export class SrcProvider implements TreeDataProvider<MLTreeItem> {
 
 	private _root: MLTreeItem;
+	private _rootFolder: string
 
 	private _onDidChangeTreeData: EventEmitter<MLTreeItem> = new EventEmitter<MLTreeItem>();
 	readonly onDidChangeTreeData: Event<MLTreeItem> = this._onDidChangeTreeData.event;
@@ -282,7 +287,7 @@ export class SrcProvider implements TreeDataProvider<MLTreeItem> {
 			if (!this._root) {
 				this._root = new MLTreeItem(undefined, undefined);
 
-				return listItems("AST").then(root => {
+				return listItems("AST",this._rootFolder).then(root => {
 					
 					this._root.merge(root);
 					return this._root.getChildren();
@@ -295,9 +300,10 @@ export class SrcProvider implements TreeDataProvider<MLTreeItem> {
 		return element.getChildren();
 	}
 
-	LoadTree(x:string){
+	LoadTree(x:string, rootFolder: string){
+		this._rootFolder = rootFolder;
 		const start = Date.now();
-			listItems(x).then(root => {
+			listItems(x, rootFolder).then(root => {
 				 console.log(`duration: ${Date.now() - start}`);
 				//if (mlViewer.visible) {
 					// schedule next poll only if still visible
